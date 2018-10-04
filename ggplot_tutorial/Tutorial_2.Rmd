@@ -38,13 +38,16 @@ library("googleway")
 library("ggrepel")
 ```
 
+
+# Drawing beautiful maps programmatically with R, `sf` and `ggplot2`
+
 This tutorial is the second part in a series of three:
 
-* [General concepts illustrated with the world map](Tutorial_1.html)
-* Adding additional layers: an example with points and polygons (this document)
-* [Positioning and layout for complex maps](Tutorial_3.html)
+* General concepts illustrated with the world map
+* Adding additional layers: an example with points and polygons
+* Positioning and layout for complex maps
 
-In the previous part, we presented general concepts with a map with little information (country borders only). The modular approach of `ggplot2` allows to successively add additional layers, for instance study sites or administrative delineations, as will be illustrated in this part.
+In the previous section, we presented general concepts with a map with little information (country borders only). The modular approach of `ggplot2` allows to successively add additional layers, for instance study sites or administrative delineations, as will be illustrated in this section.
 
 
 ## Getting started
@@ -52,8 +55,9 @@ In the previous part, we presented general concepts with a map with little infor
 Many R packages are available from [CRAN](https://cran.r-project.org/), the Comprehensive R Archive Network, which is the primary repository of R packages. The full list of packages necessary for this series of tutorials can be installed with:
 
 ```{r pkg-install-all, eval = FALSE}
-install.packages(c("cowplot", "googleway", "ggplot2", "ggrepel", 
-    "ggspatial", "libwgeom", "sf", "rworldmap", "rworldxtra"))
+install.packages(c("cowplot", "ggplot2", "ggrepel", "ggspatial",
+    "googleway", "grid", "libwgeom", "rworldmap", "rworldxtra",
+    "sf", "tools"))
 ```
 
 We start by loading the basic packages necessary for all maps, i.e. `ggplot2` and `sf`. We also suggest to use the classic dark-on-light theme for `ggplot2` (`theme_bw`), which is more appropriate for maps:
@@ -220,14 +224,14 @@ Instead of looking up coordinates manually, the package `googleway` provides a f
 
 ```{r cities-googleway, eval = FALSE}
 library("googleway")
-key <- "put_your_google_api_key_here" # real key needed
+key <- "<here_goes_your_key"
 flcities <- data.frame(state = rep("Florida", 5), city = c("Miami", 
     "Tampa", "Orlando", "Jacksonville", "Sarasota"))
 coords <- apply(flcities, 1, function(x) {
     google_geocode(address = paste(x["city"], x["state"], sep = ", "), 
         key = key)
 })
-flcities <- cbind(flcities, do.call(rbind, lapply(coords, geocode_coordinates)))
+flcities <- cbind(flcities, do.call(rbind, lapply(res, geocode_coordinates)))
 ```
 
 We can now convert the data frame with coordinates to `sf` format:
